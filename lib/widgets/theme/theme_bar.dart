@@ -12,35 +12,58 @@ class ThemeBar extends StatefulWidget {
 }
 
 class _ThemeBer extends State<ThemeBar> {
-  // ThemeMode _themeMode = ThemeMode.light;
-  //
-  // void toggleThemeMode(double value) {
-  //   setState(() {
-  //     if (value == 0.0) {
-  //       _themeMode = ThemeMode.light;
-  //     } else {
-  //       _themeMode = ThemeMode.dark;
-  //     }
-  //   });
-  // }
+  bool _darkTheme = false;
+
+  final MaterialStateProperty<Icon?> thumbIcon =
+      MaterialStateProperty.resolveWith<Icon?>(
+    (Set<MaterialState> states) {
+      if (states.contains(MaterialState.selected)) {
+        return const Icon(Icons.check);
+      }
+      return const Icon(Icons.close);
+    },
+  );
 
   @override
   Widget build(BuildContext context) {
+    _darkTheme = Theme.of(context).brightness == Brightness.dark;
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 48, 16, 16),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          const Text(
-            'Is Dark Theme enabled:',
-            style: TextStyle(fontSize: 18),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: const Icon(Icons.arrow_back_outlined),
+              ),
+              const Text(
+                'Settings',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ],
           ),
           const SizedBox(height: 20),
-          ElevatedButton(
-              onPressed: () => MyApp.of(context, ThemeMode.light),
-              child: const Text('Light')),
-          ElevatedButton(
-              onPressed: () => MyApp.of(context, ThemeMode.dark),
-              child: const Text('Dark')),
+          SwitchListTile(
+            thumbIcon: thumbIcon,
+            title: Text(
+              'Dark Mode',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            value: _darkTheme,
+            onChanged: (bool value) {
+              setState(() {
+                _darkTheme = value;
+              });
+              MyApp.of(context,
+                  _darkTheme == false ? ThemeMode.light : ThemeMode.dark);
+            },
+          ),
         ],
       ),
     );
