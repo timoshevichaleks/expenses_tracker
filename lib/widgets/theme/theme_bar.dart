@@ -1,3 +1,4 @@
+import 'package:expense_tracker/extensions/build_context_extension.dart';
 import 'package:flutter/material.dart';
 
 import '../../my_app.dart';
@@ -26,7 +27,7 @@ class _ThemeBer extends State<ThemeBar> {
 
   @override
   Widget build(BuildContext context) {
-    _darkTheme = Theme.of(context).brightness == Brightness.dark;
+    _darkTheme = context.isDarkMode;
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 48, 16, 16),
       child: Column(
